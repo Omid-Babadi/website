@@ -54,7 +54,7 @@ ai-student-startup
 ### ۱. کلون کردن پروژه  
 
 ```bash
-git clone https://github.com/your-repo/ai-student-startup.git
+git clone https://github.com/Omid-Babadi/AI-startup.git
 ```
 
 ### ۲. نصب وابستگی‌ها  
