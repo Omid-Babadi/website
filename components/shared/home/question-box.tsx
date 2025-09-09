@@ -12,7 +12,7 @@ export function FAQAccordion() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="text-3xl font-bold text-center text-blue-600 mb-10"
+        className="text-3xl font-bold text-center text-primary mb-10"
       >
         سوالات متداول درباره هوش مصنوعی
       </motion.h2>
@@ -26,8 +26,8 @@ export function FAQAccordion() {
           viewport={{ once: true, amount: 0.3 }}
           className="w-full md:w-2/5"
         >
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg overflow-hidden border border-slate-200 dark:border-slate-700">
-            <div className="h-48 relative bg-gradient-to-r from-blue-400 to-purple-500 overflow-hidden">
+          <div className="bg-card rounded-2xl shadow-lg overflow-hidden border border-border">
+            <div className="h-48 relative bg-gradient-to-r from-primary/60 to-accent/70 overflow-hidden">
               <Image
                 src="/ai-chart.svg" // Replace with your actual image path
                 alt="AI Growth Chart"
@@ -36,8 +36,10 @@ export function FAQAccordion() {
               />
             </div>
             <div className="p-6">
-              <h3 className="text-xl font-semibold mb-2 text-slate-800 dark:text-slate-100">رشد هوش مصنوعی در سال‌های اخیر</h3>
-              <p className="text-slate-600 dark:text-slate-300">
+              <h3 className="text-xl font-semibold mb-2 text-foreground">
+                رشد هوش مصنوعی در سال‌های اخیر
+              </h3>
+              <p className="text-muted-foreground">
                 این نمودار رشد چشمگیر سرمایه‌گذاری و توسعه در حوزه هوش مصنوعی را در ۵ سال گذشته نشان می‌دهد.
               </p>
             </div>
@@ -48,13 +50,9 @@ export function FAQAccordion() {
         <motion.div
           initial={{ opacity: 0, y: 60 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ 
-            duration: 0.9, 
-            ease: "easeOut",
-            staggerChildren: 0.1
-          }}
+          transition={{ duration: 0.9, ease: "easeOut", staggerChildren: 0.1 }}
           viewport={{ once: true, amount: 0.2 }}
-          className="w-full md:w-3/5 bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-6"
+          className="w-full md:w-3/5 bg-card rounded-2xl shadow-lg p-6 border border-border"
         >
           <Accordion type="single" collapsible className="w-full">
             {faqItems.slice(0, 5).map((item, index) => (
@@ -65,11 +63,11 @@ export function FAQAccordion() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true, amount: 0.3 }}
               >
-                <AccordionItem value={item.value} className="border-slate-200 dark:border-slate-700">
-                  <AccordionTrigger className="text-right hover:no-underline hover:bg-slate-50 dark:hover:bg-slate-800 px-3 rounded-lg transition-colors">
+                <AccordionItem value={item.value} className="border-border">
+                  <AccordionTrigger className="text-right hover:no-underline hover:bg-muted px-3 rounded-lg transition-colors">
                     {item.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-slate-600 dark:text-slate-300 px-3">
+                  <AccordionContent className="text-muted-foreground px-3">
                     {item.answer}
                   </AccordionContent>
                 </AccordionItem>
@@ -109,4 +107,4 @@ const faqItems = [
     question: "یادگیری عمیق (Deep Learning) چیست؟",
     answer: "یادگیری عمیق روشی از یادگیری ماشین است که از شبکه‌های عصبی چندلایه برای پردازش داده‌ها و یادگیری الگوهای پیچیده استفاده می‌کند."
   }
-];
+]

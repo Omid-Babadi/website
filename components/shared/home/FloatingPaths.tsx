@@ -1,116 +1,121 @@
-// components/FloatingPaths.tsx
 "use client"
-
-import { memo, useMemo } from "react"
 import { motion } from "framer-motion"
 
-interface Point {
-  x: number
-  y: number
-}
-
-interface PathData {
-  id: string
-  d: string
-  opacity: number
-  width: number
-  duration: number
-  delay: number
-}
-
-function generateAestheticPath(index: number, position: number): string {
-  const baseAmplitude = 120
-  const phase = index * 0.2
-  const points: Point[] = []
-  const segments = 8
-
-  const startX = 2400
-  const startY = 800
-  const endX = -2400
-  const endY = -800 + index * 25
-
-  for (let i = 0; i <= segments; i++) {
-    const progress = i / segments
-    const eased = 1 - (1 - progress) ** 2
-
-    const baseX = startX + (endX - startX) * eased
-    const baseY = startY + (endY - startY) * eased
-
-    const amplitudeFactor = 1 - eased * 0.3
-    const wave1 = Math.sin(progress * Math.PI * 3 + phase) * (baseAmplitude * 0.7 * amplitudeFactor)
-    const wave2 = Math.cos(progress * Math.PI * 4 + phase) * (baseAmplitude * 0.3 * amplitudeFactor)
-
-    points.push({
-      x: baseX * position,
-      y: baseY + wave1 + wave2,
-    })
-  }
-
-  return points
-    .map((point: Point, i: number) => {
-      if (i === 0) return `M ${point.x} ${point.y}`
-      const prev = points[i - 1]
-      const cp1x = prev.x + (point.x - prev.x) * 0.4
-      const cp1y = prev.y
-      const cp2x = prev.x + (point.x - prev.x) * 0.6
-      const cp2y = point.y
-      return `C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${point.x} ${point.y}`
-    })
-    .join(" ")
-}
-
-const generateId = (prefix: string) => `${prefix}-${Math.random().toString(36).substr(2, 9)}`
-
-export const FloatingPaths = memo(function FloatingPaths({ position }: { position: number }) {
-  const paths: PathData[] = useMemo(
-    () =>
-      Array.from({ length: 12 }, (_, i) => ({
-        id: generateId("wave"),
-        d: generateAestheticPath(i, position),
-        opacity: 0.1 + i * 0.05,
-        width: 2 + i * 0.2,
-        duration: 20,
-        delay: 0,
-      })),
-    [position]
-  )
+function FloatingPaths({ position }: { position: number }) {
+  const paths = Array.from({ length: 36 }, (_, i) => ({
+    id: i,
+    d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${
+      380 - i * 5 * position
+    } -${189 + i * 6} -${312 - i * 5 * position} ${216 - i * 6} ${
+      152 - i * 5 * position
+    } ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${
+      684 - i * 5 * position
+    } ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
+    color: `rgba(15,23,42,${0.1 + i * 0.03})`,
+    width: 0.5 + i * 0.03,
+  }))
 
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+    <div className="absolute inset-0 pointer-events-none">
       <svg
-        className="w-full h-full"
-        viewBox="-2400 -800 4800 1600"
+        className="w-full h-full text-slate-950 dark:text-white"
+        viewBox="0 0 696 316"
         fill="none"
-        preserveAspectRatio="xMidYMid slice"
       >
-        <defs>
-          <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="rgba(59,130,246,0.6)" />
-            <stop offset="50%" stopColor="rgba(37,99,235,0.6)" />
-            <stop offset="100%" stopColor="rgba(29,78,216,0.6)" />
-          </linearGradient>
-        </defs>
-
-        <g>
-          {paths.map((path) => (
-            <motion.path
-              key={path.id}
-              d={path.d}
-              stroke="url(#blueGradient)"
-              strokeWidth={path.width}
-              strokeLinecap="round"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: path.opacity, y: [0, -15, 0] }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut",
-                repeatType: "reverse",
-              }}
-            />
-          ))}
-        </g>
+        <title>Background Paths</title>
+        {paths.map((path) => (
+          <motion.path
+            key={path.id}
+            d={path.d}
+            stroke="currentColor"
+            strokeWidth={path.width}
+            strokeOpacity={0.1 + path.id * 0.03}
+            initial={{ pathLength: 0.3, opacity: 0.6 }}
+            animate={{
+              pathLength: 1,
+              opacity: [0.3, 0.6, 0.3],
+              pathOffset: [0, 1, 0],
+            }}
+            transition={{
+              duration: 20 + Math.random() * 10,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
+        ))}
       </svg>
     </div>
   )
-})
+}
+
+export default function BackgroundPaths({
+  title = "Background Paths",
+}: {
+  title?: string
+}) {
+  const words = title.split(" ")
+  return (
+    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-neutral-950">
+      <div className="absolute inset-0">
+        <FloatingPaths position={1} />
+        <FloatingPaths position={-1} />
+      </div>
+      <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2 }}
+          className="max-w-4xl mx-auto"
+        >
+          <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 tracking-tighter">
+            {words.map((word, wordIndex) => (
+              <span key={wordIndex} className="inline-block mr-4 last:mr-0">
+                {word.split("").map((letter, letterIndex) => (
+                  <motion.span
+                    key={`${wordIndex}-${letterIndex}`}
+                    initial={{ y: 100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{
+                      delay: wordIndex * 0.1 + letterIndex * 0.03,
+                      type: "spring",
+                      stiffness: 150,
+                      damping: 25,
+                    }}
+                    className="inline-block text-transparent bg-clip-text
+                                        bg-gradient-to-r from-neutral-900 to-neutral-700/80
+                                        dark:from-white dark:to-white/80"
+                  >
+                    {letter}
+                  </motion.span>
+                ))}
+              </span>
+            ))}
+          </h1>
+          <div
+            className="inline-block group relative bg-gradient-to-b from-black/10 to-white/10
+                        dark:from-white/10 dark:to-black/10 p-px rounded-2xl backdrop-blur-lg
+                        overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+          >
+            <button
+              className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md
+                            bg-white/95 hover:bg-white/100 dark:bg-black/95 dark:hover:bg-black/100
+                            text-black dark:text-white transition-all duration-300
+                            group-hover:-translate-y-0.5 border border-black/10 dark:border-white/10
+                            hover:shadow-md dark:hover:shadow-neutral-800/50"
+            >
+              <span className="opacity-90 group-hover:opacity-100 transition-opacity">Discover Excellence</span>
+              <span
+                className="ml-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5
+                                transition-all duration-300"
+              >
+                →
+              </span>
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  )
+}
+
+export { FloatingPaths }

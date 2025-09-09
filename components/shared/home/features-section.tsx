@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import { motion } from "framer-motion"
 import {
   Card,
@@ -8,32 +8,68 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { BarChart3, Brain, Zap, Shield } from "lucide-react"
+
+import AiImage from "@/public/smart-escalation.webp"
+import SpeedImage from "@/public/smart-escalation.webp"
+import DashboardImage from "@/public/take-actions-on-your-systems.webp"
+import SecurityImage from "@/public/template-retro-edge-dirty-ancient.jpg"
+
+// extra sample images (replace with real ones if you want)
+import CloudImage from "@/public/smart-escalation.webp"
+import ReportImage from "@/public/take-actions-on-your-systems.webp"
+import AutomationImage from "@/public/smart-escalation.webp"
+import SupportImage from "@/public/template-retro-edge-dirty-ancient.jpg"
 
 const features = [
   {
-    icon: Brain,
-    title: "تحلیل هوشمند با هوش مصنوعی",
+    image: AiImage,
+    title: "🤖 تحلیل هوشمند با هوش مصنوعی",
     description:
       "الگوریتم‌های پیشرفته یادگیری ماشین به‌صورت خودکار الگوها و ناهنجاری‌ها را در داده‌های شما شناسایی می‌کنند.",
   },
   {
-    icon: Zap,
-    title: "پردازش لحظه‌ای",
+    image: SpeedImage,
+    title: "⚡ پردازش لحظه‌ای",
     description:
       "میلیون‌ها داده را در لحظه پردازش کنید و به بینش‌های فوری و پاسخ‌های سریع دسترسی پیدا کنید.",
   },
   {
-    icon: BarChart3,
-    title: "داشبوردهای تعاملی",
+    image: DashboardImage,
+    title: "📊 داشبوردهای تعاملی",
     description:
       "داشبوردهای زیبا و قابل‌سفارشی‌سازی که داده‌های پیچیده را به شکلی ساده و قابل درک نمایش می‌دهند.",
+    highlight: true, // 🔥 this one is bold/bigger
   },
   {
-    icon: Shield,
-    title: "امنیت در سطح سازمانی",
+    image: SecurityImage,
+    title: "🔒 امنیت در سطح سازمانی",
     description:
       "رمزنگاری در سطح بانکی و رعایت استانداردهای بین‌المللی برای حفظ امنیت داده‌های شما.",
+  },
+  // --- second row ---
+  {
+    image: CloudImage,
+    title: "☁️ پردازش ابری",
+    description:
+      "دسترسی به قدرت پردازشی بالا بدون نیاز به زیرساخت‌های پیچیده داخلی.",
+  },
+  {
+    image: ReportImage,
+    title: "📑 گزارش‌های خودکار",
+    description:
+      "تولید گزارش‌های دقیق و زمان‌بندی‌شده به‌صورت خودکار برای تصمیم‌گیری بهتر.",
+  },
+  {
+    image: AutomationImage,
+    title: "⚙️ اتوماسیون هوشمند",
+    description:
+      "کاهش کارهای تکراری با جریان‌های کاری خودکار و یکپارچه‌سازی سیستم‌ها.",
+  },
+  {
+    image: SupportImage,
+    title: "🛠️ پشتیبانی ۲۴/۷",
+    description:
+      "دسترسی به تیم پشتیبانی در تمام ساعات برای اطمینان از عملکرد بی‌وقفه.",
   },
 ]
 
@@ -44,7 +80,7 @@ export function FeaturesSection() {
       className="relative py-24 bg-gradient-to-b from-muted/40 via-background to-muted/30 backdrop-blur-sm"
       dir="rtl"
     >
-      {/* subtle gradient background effect */}
+      {/* background glow */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <motion.div
           initial={{ opacity: 0 }}
@@ -55,7 +91,7 @@ export function FeaturesSection() {
       </div>
 
       <div className="container mx-auto px-6">
-        {/* عنوان بخش */}
+        {/* Section title */}
         <motion.div
           className="text-center mb-20"
           initial={{ opacity: 0, y: 40 }}
@@ -74,38 +110,50 @@ export function FeaturesSection() {
           </p>
         </motion.div>
 
-        {/* کارت ویژگی‌ها */}
+        {/* Feature cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((feature, index) => (
-            <motion.div
+          {features.map((feature) => (
+            <Card
               key={feature.title}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.15, duration: 0.7 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -10, scale: 1.03 }}
-              className="h-full"
+              className={`relative h-full bg-card/70 border shadow-md rounded-3xl overflow-hidden ${
+                feature.highlight
+                  ? "border-2 border-primary shadow-lg scale-105"
+                  : "border-border"
+              }`}
             >
-              <Card className="relative h-full bg-card/80 border border-border/60 hover:border-primary/50 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-3xl overflow-hidden">
-                <CardHeader className="text-center pb-6">
-                  <motion.div
-                    className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg"
-                    whileHover={{ scale: 1.12, rotate: 8 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 12 }}
-                  >
-                    <feature.icon className="w-9 h-9 text-white" />
-                  </motion.div>
-                  <CardTitle className="text-xl font-semibold text-foreground">
-                    {feature.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-muted-foreground leading-relaxed text-justify text-sm lg:text-base">
-                    {feature.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </motion.div>
+              {/* Image top */}
+              <div className="relative w-full h-40 overflow-hidden">
+                <Image
+                  src={feature.image}
+                  alt={feature.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+              <CardHeader className="text-center pt-6">
+                <CardTitle
+                  className={`${
+                    feature.highlight
+                      ? "text-2xl font-extrabold text-primary"
+                      : "text-xl font-semibold"
+                  } text-foreground`}
+                >
+                  {feature.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription
+                  className={`leading-relaxed text-justify ${
+                    feature.highlight
+                      ? "text-base lg:text-lg text-foreground"
+                      : "text-sm lg:text-base text-muted-foreground"
+                  }`}
+                >
+                  {feature.description}
+                </CardDescription>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>

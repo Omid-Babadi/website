@@ -11,8 +11,16 @@ export function Footer() {
   }
 
   return (
-    <footer className="bg-secondary text-secondary-foreground py-16">
-      <div className="container mx-auto px-6">
+    <footer
+      className="relative bg-secondary text-secondary-foreground py-16 overflow-hidden"
+    >
+      {/* Background grid pattern */}
+      <div
+        className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:40px_40px]"
+      />
+
+      {/* Content wrapper with positioning above background */}
+      <div className="relative container mx-auto px-6">
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           {/* Logo and description */}
           <motion.div
